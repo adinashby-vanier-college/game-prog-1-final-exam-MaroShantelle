@@ -1,19 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class name="CannonBall" extends="Actor" enable="true" strideversion="1">
+<class name="CannonBall" extends="Actor" extends-java="Actor" enable="true" strideversion="1">
     <javadoc xml:space="preserve"/>
     <imports>
         <import target="java.util.*" enable="true"/>
         <import target="greenfoot.*" enable="true"/>
     </imports>
     <implements/>
-    <fields/>
-    <constructors/>
-    <methods>
-        <method access="public" type="void" name="act" enable="true">
-            <javadoc xml:space="preserve">Act - do whatever the CannonBall wants to do. This method is called whenever the 'Act' or 'Run' button gets pressed in the environment.</javadoc>
+    <fields>
+        <variable access="private" type="Point2D" type-java="Point2D" name="position" enable="true"/>
+        <variable access="private" type="Vector2D" type-java="Vector2D" name="velocity" enable="true"/>
+        <variable access="private" type="Vector2D" type-java="Vector2D" name="acceleration" enable="true"/>
+        <variable access="private" static="true" final="true" type="double" type-java="double" name="GRAVITY" value="0.0" value-java="0.0" enable="true"/>
+    </fields>
+    <constructors>
+        <constructor access="public" enable="true">
+            <javadoc xml:space="preserve">Cannonball constructor</javadoc>
             <params/>
             <throws/>
-            <body/>
+            <body>
+                <assign dest="position" dest-java="position" src="null" src-java="null" enable="true"/>
+                <assign dest="velocity" dest-java="velocity" src="new Vector2D(0.0,0.)" src-java=" new Vector2D(0.0, 0.)" enable="true"/>
+                <assign dest="acceleration" dest-java="acceleration" src="new Vector2D(0.0,GRAVITY)" src-java=" new Vector2D(0.0, GRAVITY)" enable="true"/>
+            </body>
+        </constructor>
+    </constructors>
+    <methods>
+        <method access="public" type="void" type-java="void" name="act" enable="true">
+            <javadoc xml:space="preserve"/>
+            <params/>
+            <throws/>
+            <body>
+                <call expression="eat()" expression-java="eat()" enable="true"/>
+                <if condition="isGameOverTouchesLadyBug()" condition-java="isGameOverTouchesLadyBug()" enable="true">
+                    <ifStatements>
+                        <call expression="transitionToGameOverScreen()" expression-java="transitionToGameOverScreen()" enable="true"/>
+                    </ifStatements>
+                </if>
+            </body>
+        </method>
+        <method access="public" type="void" type-java="void" name="eat" enable="true">
+            <javadoc xml:space="preserve">When the cannonball interescts with the ladybug it eats it</javadoc>
+            <params/>
+            <throws/>
+            <body>
+                <variable type="Actor" type-java="Actor" name="Ladybug" value="getOneIntersectingObject(Ladybug.class)" value-java="getOneIntersectingObject(Ladybug.class)" enable="true"/>
+                <if condition="Ladybug!=null" condition-java="Ladybug != null" enable="true">
+                    <ifStatements>
+                        <variable type="World" type-java="World" name="world" value="getWorld()" value-java="getWorld()" enable="true"/>
+                        <call expression="world.removeObject(Ladybug)" expression-java="world.removeObject(Ladybug)" enable="true"/>
+                    </ifStatements>
+                </if>
+            </body>
+        </method>
+        <method access="public" type="boolean" type-java="boolean" name="isGameOverTouchesLadyBug" enable="true">
+            <javadoc xml:space="preserve">It states if its true when the ladybug no longer appears in the world </javadoc>
+            <params/>
+            <throws/>
+            <body>
+                <variable type="World" type-java="World" name="world" value="getWorld()" value-java="getWorld()" enable="true"/>
+                <if condition="world.getObjects(Ladybug.class).isEmpty()" condition-java="world.getObjects(Ladybug.class).isEmpty()" enable="true">
+                    <ifStatements>
+                        <return value="true" value-java="true" enable="true"/>
+                    </ifStatements>
+                    <else>
+                        <return value="false" value-java="false" enable="true"/>
+                    </else>
+                </if>
+            </body>
+        </method>
+        <method access="public" type="void" type-java="void" name="transitionToGameOverScreen" enable="true">
+            <javadoc xml:space="preserve">Transitions to the Game Over Screen when the cannon ball intersects with the ladybug.</javadoc>
+            <params/>
+            <throws/>
+            <body>
+                <variable type="World" type-java="World" name="gameOverScreen" value="getWorld()" value-java="getWorld()" enable="true"/>
+                <call expression="Greenfoot.setWorld(gameOverScreen)" expression-java="Greenfoot.setWorld(gameOverScreen)" enable="true"/>
+                <call expression="Greenfoot.playSound(&quot;lose.wav&quot;)" expression-java="Greenfoot.playSound(&quot;lose.wav&quot;)" enable="true"/>
+            </body>
         </method>
     </methods>
 </class>
